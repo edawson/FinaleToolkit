@@ -152,7 +152,7 @@ def region_breakpoint_motifs(
                                 "aligned to the end of a mitochondrial DNA."
                             )
                             continue
-                        if "N" not in forward_kmer:
+                        if forward_kmer in breakpoint_motif_counts:
                             breakpoint_motif_counts[forward_kmer] += 1
                     except ValueError:
                         continue
@@ -170,10 +170,9 @@ def region_breakpoint_motifs(
                                 "aligned to the end of a mitochondrial DNA."
                             )
                             continue
-                        if "N" not in reverse_kmer:
-                            breakpoint_motif_counts[
-                                reverse_complement(reverse_kmer)
-                            ] += 1
+                        rc_reverse_kmer = reverse_complement(reverse_kmer)
+                        if rc_reverse_kmer in breakpoint_motif_counts:
+                            breakpoint_motif_counts[rc_reverse_kmer] += 1
                     except (RuntimeError, ValueError):
                         if verbose > 1:
                             stderr.write(

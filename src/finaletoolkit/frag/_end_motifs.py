@@ -130,7 +130,7 @@ def region_end_motifs(
                         forward_kmer = refseq.sequence(
                             contig, int(frag.start), int(frag.start + k)
                         )
-                        if len(forward_kmer) == k and "N" not in forward_kmer:
+                        if len(forward_kmer) == k and forward_kmer in end_motif_counts:
                             end_motif_counts[forward_kmer] += 1
                     except ValueError:
                         continue
@@ -139,8 +139,10 @@ def region_end_motifs(
                         reverse_kmer = refseq.sequence(
                             contig, int(frag.stop - k), int(frag.stop)
                         )
-                        if len(reverse_kmer) == k and "N" not in reverse_kmer:
-                            end_motif_counts[reverse_complement(reverse_kmer)] += 1
+                        if len(reverse_kmer) == k:
+                            rc_reverse_kmer = reverse_complement(reverse_kmer)
+                            if rc_reverse_kmer in end_motif_counts:
+                                end_motif_counts[rc_reverse_kmer] += 1
                     except ValueError as e:
                         raise RuntimeError(
                             "Error querying sequence at "
@@ -156,7 +158,7 @@ def region_end_motifs(
                             forward_kmer = refseq.sequence(
                                 contig, int(frag.start), int(frag.start + k)
                             )
-                            if len(forward_kmer) == k and "N" not in forward_kmer:
+                            if len(forward_kmer) == k and forward_kmer in end_motif_counts:
                                 end_motif_counts[forward_kmer] += 1
                         except ValueError:
                             continue
@@ -165,10 +167,10 @@ def region_end_motifs(
                             reverse_kmer = refseq.sequence(
                                 contig, int(frag.stop - k), int(frag.stop)
                             )
-                            if len(reverse_kmer) == k and "N" not in reverse_kmer:
-                                end_motif_counts[
-                                    reverse_complement(reverse_kmer)
-                                ] += 1
+                            if len(reverse_kmer) == k:
+                                rc_reverse_kmer = reverse_complement(reverse_kmer)
+                                if rc_reverse_kmer in end_motif_counts:
+                                    end_motif_counts[rc_reverse_kmer] += 1
                         except ValueError:
                             if verbose > 1:
                                 stderr.write(
